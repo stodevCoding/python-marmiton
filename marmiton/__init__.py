@@ -29,7 +29,7 @@ class Marmiton(object):
         num_of_recipe = 0
         search_data = []
 
-        for i in range(1, 11):
+        for i in range(1, 9):
 
             url = base_url + query_url + "&start=" + str(num_of_recipe) + "&page=" + str(i)
             print(url)
