@@ -26,40 +26,36 @@ class Marmiton(object):
         """
         base_url = "http://www.marmiton.org/recettes/recherche.aspx?"
         query_url = urllib.parse.urlencode(query_dict)
-        num_of_recipe = 0
+
+        url = base_url + query_url
+
+        html_content = urllib.request.urlopen(url).read()
+        soup = BeautifulSoup(html_content, 'html.parser')
+
         search_data = []
 
-        for i in range(1, 9):
+        articles = soup.findAll("div", {"class": "recipe-card"})
 
-            url = base_url + query_url + "&start=" + str(num_of_recipe) + "&page=" + str(i)
-            print(url)
-
-            html_content = urllib.request.urlopen(url).read()
-            soup = BeautifulSoup(html_content, 'html.parser')
-
-            articles = soup.findAll("div", {"class": "recipe-card"})
-
-            iterarticles = iter(articles)
-            for article in iterarticles:
-                data = {}
-                if article.find("div", {"class": "recipe-card__sponsored"}):
-                    continue
+        iterarticles = iter(articles)
+        for article in iterarticles:
+            data = {}
+            try:
+                data["name"] = article.find("h4", {"class": "recipe-card__title"}).get_text().strip(' \t\n\r')
+                data["description"] = article.find("div", {"class": "recipe-card__description"}).get_text().strip(
+                    ' \t\n\r')
+                data["url"] = article.find("a", {"class": "recipe-card-link"})['href']
+                data["rate"] = article.find("span", {"class": "recipe-card__rating__value"}).text.strip(' \t\n\r')
                 try:
-                    data["name"] = article.find("h4", {"class": "recipe-card__title"}).get_text().strip(' \t\n\r')
-                    data["description"] = article.find("div", {"class": "recipe-card__description"}).get_text().strip(
-                        ' \t\n\r')
-                    data["url"] = article.find("a", {"class": "recipe-card-link"})['href']
-                    data["rate"] = article.find("span", {"class": "recipe-card__rating__value"}).text.strip(' \t\n\r')
-                    try:
-                        data["image"] = article.find('img')['src']
-                    except Exception as e1:
-                        pass
-                except Exception as e2:
+                    data["image"] = article.find('img')['src']
+                except Exception as e1:
                     pass
-                if data:
-                    search_data.append(data)
-                    num_of_recipe += 1
+            except Exception as e2:
+                pass
+            if data:
+                search_data.append(data)
+
         return search_data
+
 
     @staticmethod
     def searchbyingredients(query_dict):
