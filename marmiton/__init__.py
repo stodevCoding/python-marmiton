@@ -128,7 +128,7 @@ class Marmiton(object):
             name = soup.find("h1", {"class", "main-title"}).get_text().strip(' \t\n\r')
 
         ingredients = [item.text.replace("\n", "").strip() for item in
-                       soup.find_all("span", {"class": "recipe-ingredients__list__item"})]
+                       soup.find_all('li', {"class": "recipe-ingredients__list__item"})]
 
         try:
             tags = list(set([item.text.replace("\n", "").strip() for item in
