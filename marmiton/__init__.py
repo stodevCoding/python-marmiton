@@ -115,7 +115,7 @@ class Marmiton(object):
         """
         data = {}
 
-        base_url = "http://www.marmiton.org/"
+        base_url = "http://www.marmiton.org"
         url = base_url + uri
 
         html_content = urllib.request.urlopen(url).read()
