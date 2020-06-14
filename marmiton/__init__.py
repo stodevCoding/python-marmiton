@@ -175,8 +175,12 @@ class Marmiton(object):
             # soup_step.find("h3").decompose()
             steps.append(Marmiton.__clean_text(soup_step))
 
-        image = soup.find("img", {"id": "af-diapo-desktop-0_img"})['src'] if soup.find("img", {
-            "id": "af-diapo-desktop-0_img"}) else ""
+        image = soup.find("img", {"id": "recipe-media-viewer-main-picture"})['data-src'] if soup.find("img", {
+            "id": "recipe-media-viewer-main-picture"}) else ""
+
+        if image == "":
+            image = soup.find("img", {"id": "recipe-media-viewer-thumbnail-0"})['data-src'] if soup.find("img", {
+                "id": "recipe-media-viewer-thumbnail-0"}) else ""
 
         data.update({
             "ingredients": ingredients,
