@@ -46,7 +46,8 @@ class Marmiton(object):
                 data["url"] = article.find("a", {"class": "recipe-card-link"})['href']
                 data["rate"] = article.find("span", {"class": "recipe-card__rating__value"}).text.strip(' \t\n\r')
                 try:
-                    data["image"] = article.find('img')['src']
+                    data["image"] = article.find('img', {"class": "lazyloaded"})['data-src']
+                    print(data["image"])
                 except Exception as e1:
                     pass
             except Exception as e2:
